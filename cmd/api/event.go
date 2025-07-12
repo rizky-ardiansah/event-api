@@ -74,7 +74,7 @@ func (app *application) updateEvents(c *gin.Context) {
 	}
 
 	if existingEvent == nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Rvent not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
 		return
 	}
 
@@ -104,5 +104,5 @@ func (app *application) deleteEvent(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete event"})
 	}
 
-	c.JSON(http.StatusNoContent, nil)
+	c.JSON(http.StatusNoContent, gin.H{"success": "Delete success"})
 }
