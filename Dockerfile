@@ -10,7 +10,7 @@ COPY . .
 
 RUN go build -o event-api ./cmd/api
 
-FROM gcr.io/distroless/debian10
+FROM alpine:latest
 
 COPY --from=builder /app/event-api /app/event-api
 COPY --from=builder /app/docs/swagger.json /app/swagger.json
