@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/api/v1/attendees/{id}/events": {
             "get": {
-                "description": "Get all events that a specific user is attending",
+                "description": "Returns all events for a given attendee",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,11 +27,11 @@ const docTemplate = `{
                 "tags": [
                     "attendees"
                 ],
-                "summary": "Get events by attendee",
+                "summary": "Returns all events for a given attendee",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Attendee/User ID",
+                        "description": "Attendee ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -46,25 +46,13 @@ const docTemplate = `{
                                 "$ref": "#/definitions/database.Event"
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             }
         },
         "/api/v1/auth/login": {
             "post": {
-                "description": "Authenticate user with email and password, returns JWT token",
+                "description": "Logs in a user",
                 "consumes": [
                     "application/json"
                 ],
@@ -74,11 +62,11 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "User login",
+                "summary": "Logs in a user",
                 "parameters": [
                     {
-                        "description": "User credentials",
-                        "name": "credentials",
+                        "description": "User",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -92,31 +80,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/main.loginResponse"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             }
         },
         "/api/v1/auth/register": {
             "post": {
-                "description": "Register a new user with email, password, and name",
+                "description": "Registers a new user",
                 "consumes": [
                     "application/json"
                 ],
@@ -126,10 +96,10 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "User registration",
+                "summary": "Registers a new user",
                 "parameters": [
                     {
-                        "description": "User registration data",
+                        "description": "User",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -143,18 +113,6 @@ const docTemplate = `{
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/database.User"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
                         }
                     }
                 }
@@ -191,7 +149,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create a new event with authentication required",
+                "description": "Creates a new event",
                 "consumes": [
                     "application/json"
                 ],
@@ -201,10 +159,10 @@ const docTemplate = `{
                 "tags": [
                     "events"
                 ],
-                "summary": "Create a new event",
+                "summary": "Creates a new event",
                 "parameters": [
                     {
-                        "description": "Event data",
+                        "description": "Event",
                         "name": "event",
                         "in": "body",
                         "required": true,
@@ -219,31 +177,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/database.Event"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             }
         },
         "/api/v1/events/{id}": {
             "get": {
-                "description": "Get a single event by its ID",
+                "description": "Returns a single event",
                 "consumes": [
                     "application/json"
                 ],
@@ -253,7 +193,7 @@ const docTemplate = `{
                 "tags": [
                     "events"
                 ],
-                "summary": "Get event by ID",
+                "summary": "Returns a single event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -269,24 +209,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/database.Event"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             },
@@ -296,7 +218,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Update an existing event (only owner can update)",
+                "description": "Updates an existing event",
                 "consumes": [
                     "application/json"
                 ],
@@ -306,7 +228,7 @@ const docTemplate = `{
                 "tags": [
                     "events"
                 ],
-                "summary": "Update an event",
+                "summary": "Updates an existing event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -316,7 +238,7 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Updated event data",
+                        "description": "Event",
                         "name": "event",
                         "in": "body",
                         "required": true,
@@ -331,36 +253,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/database.Event"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             },
@@ -370,7 +262,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Delete an event (only owner can delete)",
+                "description": "Deletes an existing event",
                 "consumes": [
                     "application/json"
                 ],
@@ -380,7 +272,7 @@ const docTemplate = `{
                 "tags": [
                     "events"
                 ],
-                "summary": "Delete an event",
+                "summary": "Deletes an existing event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -392,47 +284,14 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
+                        "description": "No Content"
                     }
                 }
             }
         },
         "/api/v1/events/{id}/attendees": {
             "get": {
-                "description": "Get all users who are attending a specific event",
+                "description": "Returns all attendees for a given event",
                 "consumes": [
                     "application/json"
                 ],
@@ -442,7 +301,7 @@ const docTemplate = `{
                 "tags": [
                     "attendees"
                 ],
-                "summary": "Get attendees for event",
+                "summary": "Returns all attendees for a given event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -461,18 +320,6 @@ const docTemplate = `{
                                 "$ref": "#/definitions/database.User"
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             }
@@ -484,7 +331,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Add a user as attendee to an event (only event owner can add)",
+                "description": "Adds an attendee to an event",
                 "consumes": [
                     "application/json"
                 ],
@@ -494,7 +341,7 @@ const docTemplate = `{
                 "tags": [
                     "attendees"
                 ],
-                "summary": "Add attendee to event",
+                "summary": "Adds an attendee to an event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -517,42 +364,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/database.Attendee"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             },
@@ -562,7 +373,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Remove a user from an event's attendee list (only event owner can remove)",
+                "description": "Deletes an attendee from an event",
                 "consumes": [
                     "application/json"
                 ],
@@ -572,7 +383,7 @@ const docTemplate = `{
                 "tags": [
                     "attendees"
                 ],
-                "summary": "Remove attendee from event",
+                "summary": "Deletes an attendee from an event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -591,40 +402,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
+                        "description": "No Content"
                     }
                 }
             }
@@ -635,13 +413,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "eventId": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "userId": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                 }
             }
         },
@@ -654,26 +435,32 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
-                "date": {
-                    "type": "string"
+                "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "example": "Go Conference"
                 },
                 "description": {
                     "type": "string",
-                    "minLength": 10
+                    "minLength": 10,
+                    "example": "A conference about Go programming"
                 },
-                "id": {
-                    "type": "integer"
+                "date": {
+                    "type": "string",
+                    "example": "2025-05-20"
                 },
                 "location": {
                     "type": "string",
-                    "minLength": 3
+                    "minLength": 3,
+                    "example": "San Francisco"
                 },
-                "name": {
-                    "type": "string",
-                    "minLength": 3
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
                 },
                 "ownerId": {
-                    "type": "integer"
+                    "type": "integer",
+                    "readOnly": true
                 }
             }
         },
@@ -681,19 +468,18 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "john.doe@example.com"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "John Doe"
                 }
             }
-        },
-        "gin.H": {
-            "type": "object",
-            "additionalProperties": {}
         },
         "main.loginRequest": {
             "type": "object",
@@ -703,11 +489,13 @@ const docTemplate = `{
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "newuser@example.com"
                 },
                 "password": {
                     "type": "string",
-                    "minLength": 8
+                    "minLength": 8,
+                    "example": "securepassword123"
                 }
             }
         },
@@ -715,7 +503,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "token": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
                 }
             }
         },
@@ -728,22 +517,25 @@ const docTemplate = `{
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "newuser@example.com"
                 },
                 "name": {
                     "type": "string",
-                    "minLength": 2
+                    "minLength": 2,
+                    "example": "Jane Smith"
                 },
                 "password": {
                     "type": "string",
-                    "minLength": 8
+                    "minLength": 8,
+                    "example": "securepassword123"
                 }
             }
         }
     },
     "securityDefinitions": {
         "BearerAuth": {
-            "description": "masukan token JWT di header Authorization dengan format **Bearer \u0026lt;token\u0026gt;**",
+            "description": "Enter your bearer token in the format **Bearer \u0026lt;token\u0026gt;**",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
@@ -758,7 +550,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Event API",
-	Description:      "ini adalah simple API untuk mengelola event",
+	Description:      "A rest API in Go using Gin framework",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

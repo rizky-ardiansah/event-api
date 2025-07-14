@@ -1,14 +1,15 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "ini adalah simple API untuk mengelola event",
+        "description": "A rest API in Go using Gin framework",
+        "title": "Event API",
         "contact": {},
         "version": "1.0"
     },
     "paths": {
         "/api/v1/attendees/{id}/events": {
             "get": {
-                "description": "Get all events that a specific user is attending",
+                "description": "Returns all events for a given attendee",
                 "consumes": [
                     "application/json"
                 ],
@@ -18,11 +19,11 @@
                 "tags": [
                     "attendees"
                 ],
-                "summary": "Get events by attendee",
+                "summary": "Returns all events for a given attendee",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Attendee/User ID",
+                        "description": "Attendee ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -37,25 +38,13 @@
                                 "$ref": "#/definitions/database.Event"
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             }
         },
         "/api/v1/auth/login": {
             "post": {
-                "description": "Authenticate user with email and password, returns JWT token",
+                "description": "Logs in a user",
                 "consumes": [
                     "application/json"
                 ],
@@ -65,11 +54,11 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "User login",
+                "summary": "Logs in a user",
                 "parameters": [
                     {
-                        "description": "User credentials",
-                        "name": "credentials",
+                        "description": "User",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -83,31 +72,13 @@
                         "schema": {
                             "$ref": "#/definitions/main.loginResponse"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             }
         },
         "/api/v1/auth/register": {
             "post": {
-                "description": "Register a new user with email, password, and name",
+                "description": "Registers a new user",
                 "consumes": [
                     "application/json"
                 ],
@@ -117,10 +88,10 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "User registration",
+                "summary": "Registers a new user",
                 "parameters": [
                     {
-                        "description": "User registration data",
+                        "description": "User",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -134,18 +105,6 @@
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/database.User"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
                         }
                     }
                 }
@@ -182,7 +141,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create a new event with authentication required",
+                "description": "Creates a new event",
                 "consumes": [
                     "application/json"
                 ],
@@ -192,10 +151,10 @@
                 "tags": [
                     "events"
                 ],
-                "summary": "Create a new event",
+                "summary": "Creates a new event",
                 "parameters": [
                     {
-                        "description": "Event data",
+                        "description": "Event",
                         "name": "event",
                         "in": "body",
                         "required": true,
@@ -210,31 +169,13 @@
                         "schema": {
                             "$ref": "#/definitions/database.Event"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             }
         },
         "/api/v1/events/{id}": {
             "get": {
-                "description": "Get a single event by its ID",
+                "description": "Returns a single event",
                 "consumes": [
                     "application/json"
                 ],
@@ -244,7 +185,7 @@
                 "tags": [
                     "events"
                 ],
-                "summary": "Get event by ID",
+                "summary": "Returns a single event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -260,24 +201,6 @@
                         "schema": {
                             "$ref": "#/definitions/database.Event"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             },
@@ -287,7 +210,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Update an existing event (only owner can update)",
+                "description": "Updates an existing event",
                 "consumes": [
                     "application/json"
                 ],
@@ -297,7 +220,7 @@
                 "tags": [
                     "events"
                 ],
-                "summary": "Update an event",
+                "summary": "Updates an existing event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -307,7 +230,7 @@
                         "required": true
                     },
                     {
-                        "description": "Updated event data",
+                        "description": "Event",
                         "name": "event",
                         "in": "body",
                         "required": true,
@@ -322,36 +245,6 @@
                         "schema": {
                             "$ref": "#/definitions/database.Event"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             },
@@ -361,7 +254,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Delete an event (only owner can delete)",
+                "description": "Deletes an existing event",
                 "consumes": [
                     "application/json"
                 ],
@@ -371,7 +264,7 @@
                 "tags": [
                     "events"
                 ],
-                "summary": "Delete an event",
+                "summary": "Deletes an existing event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -383,47 +276,14 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
+                        "description": "No Content"
                     }
                 }
             }
         },
         "/api/v1/events/{id}/attendees": {
             "get": {
-                "description": "Get all users who are attending a specific event",
+                "description": "Returns all attendees for a given event",
                 "consumes": [
                     "application/json"
                 ],
@@ -433,7 +293,7 @@
                 "tags": [
                     "attendees"
                 ],
-                "summary": "Get attendees for event",
+                "summary": "Returns all attendees for a given event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -452,18 +312,6 @@
                                 "$ref": "#/definitions/database.User"
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             }
@@ -475,7 +323,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Add a user as attendee to an event (only event owner can add)",
+                "description": "Adds an attendee to an event",
                 "consumes": [
                     "application/json"
                 ],
@@ -485,7 +333,7 @@
                 "tags": [
                     "attendees"
                 ],
-                "summary": "Add attendee to event",
+                "summary": "Adds an attendee to an event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -508,42 +356,6 @@
                         "schema": {
                             "$ref": "#/definitions/database.Attendee"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
                     }
                 }
             },
@@ -553,7 +365,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Remove a user from an event's attendee list (only event owner can remove)",
+                "description": "Deletes an attendee from an event",
                 "consumes": [
                     "application/json"
                 ],
@@ -563,7 +375,7 @@
                 "tags": [
                     "attendees"
                 ],
-                "summary": "Remove attendee from event",
+                "summary": "Deletes an attendee from an event",
                 "parameters": [
                     {
                         "type": "integer",
@@ -582,40 +394,7 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
+                        "description": "No Content"
                     }
                 }
             }
@@ -682,10 +461,6 @@
                 }
             }
         },
-        "gin.H": {
-            "type": "object",
-            "additionalProperties": {}
-        },
         "main.loginRequest": {
             "type": "object",
             "required": [
@@ -734,7 +509,7 @@
     },
     "securityDefinitions": {
         "BearerAuth": {
-            "description": "masukan token JWT di header Authorization dengan format **Bearer \u0026lt;token\u0026gt;**",
+            "description": "Enter your bearer token in the format **Bearer \u0026lt;token\u0026gt;**",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

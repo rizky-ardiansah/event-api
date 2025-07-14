@@ -25,18 +25,15 @@ type loginResponse struct {
 	Token string `json:"token"`
 }
 
-// Login authenticates a user and returns a JWT token
+// Login logs in a user
 //
-//	@Summary		User login
-//	@Description	Authenticate user with email and password, returns JWT token
+//	@Summary		Logs in a user
+//	@Description	Logs in a user
 //	@Tags			auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			credentials	body		loginRequest	true	"User credentials"
-//	@Success		200			{object}	loginResponse
-//	@Failure		400			{object}	gin.H
-//	@Failure		401			{object}	gin.H
-//	@Failure		500			{object}	gin.H
+//	@Param			user	body	loginRequest	true	"User"
+//	@Success		200	{object}	loginResponse
 //	@Router			/api/v1/auth/login [post]
 func (app *application) login(c *gin.Context) {
 	var auth loginRequest
@@ -76,18 +73,15 @@ func (app *application) login(c *gin.Context) {
 	c.JSON(http.StatusOK, loginResponse{Token: tokenString})
 }
 
-// RegisterUser creates a new user account
-//
-//	@Summary		User registration
-//	@Description	Register a new user with email, password, and name
-//	@Tags			auth
-//	@Accept			json
-//	@Produce		json
-//	@Param			user	body		registerRequest	true	"User registration data"
-//	@Success		201		{object}	database.User
-//	@Failure		400		{object}	gin.H
-//	@Failure		500		{object}	gin.H
-//	@Router			/api/v1/auth/register [post]
+// RegisterUser registers a new user
+// @Summary		Registers a new user
+// @Description	Registers a new user
+// @Tags			auth
+// @Accept			json
+// @Produce		json
+// @Param			user	body		registerRequest	true	"User"
+// @Success		201	{object}	database.User
+// @Router			/api/v1/auth/register [post]
 func (app *application) registerUser(c *gin.Context) {
 	var register registerRequest
 
@@ -99,6 +93,7 @@ func (app *application) registerUser(c *gin.Context) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(register.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+		return
 	}
 
 	register.Password = string(hashedPassword)
@@ -111,6 +106,7 @@ func (app *application) registerUser(c *gin.Context) {
 	err = app.models.Users.Insert(&user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not create user"})
+		return
 	}
 
 	c.JSON(http.StatusCreated, user)

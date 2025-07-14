@@ -4,21 +4,20 @@ import (
 	"database/sql"
 	"log"
 
-	_ "github.com/rizky-ardiansah/event-api/docs"
 	_ "github.com/joho/godotenv/autoload"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
+	_ "github.com/rizky-ardiansah/event-api/docs"
 	"github.com/rizky-ardiansah/event-api/internal/database"
 	"github.com/rizky-ardiansah/event-api/internal/env"
 )
 
-// title: Event API
+// @title Event API
 // @version 1.0
-// @description ini adalah simple API untuk mengelola event
-// @securityDefinitions.apiKey BearerAuth
+// @description A rest API in Go using Gin framework
+// @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
-// @description masukan token JWT di header Authorization dengan format **Bearer &lt;token&gt;**
-
+// @description Enter your bearer token in the format **Bearer &lt;token&gt;**
 
 type application struct {
 	port      int
@@ -27,7 +26,8 @@ type application struct {
 }
 
 func main() {
-	db, err := sql.Open("sqlite3", "./data.db")
+	dbURL := env.GetEnvString("DATABASE_URL", " ")
+	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
 		log.Fatal(err)
 	}
