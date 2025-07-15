@@ -13,7 +13,7 @@ RUN go build -o event-api ./cmd/api
 FROM alpine:latest
 
 COPY --from=builder /app/event-api /app/event-api
-COPY --from=builder /app/docs/swagger.json /app/swagger.json
+COPY --from=builder /app/docs /app/docs
 
 WORKDIR /app
 
