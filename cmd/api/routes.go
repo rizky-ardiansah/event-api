@@ -37,7 +37,7 @@ func (app *application) routes() http.Handler {
 			c.Redirect(302, "/swagger/index.html")
 			return
 		}
-		baseURL := env.GetEnvString("BASE_URL", "http://localhost:8080")
+		baseURL := env.GetEnvString("BASE_URL", "https://localhost:8080")
 		ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL(baseURL+"/swagger/doc.json"))(c)
 	})
 
