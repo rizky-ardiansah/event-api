@@ -14,6 +14,9 @@ import (
 // @title Event API
 // @version 1.0
 // @description A rest API in Go using Gin framework
+// schemes https http
+// @BasePath /api/v1
+// @host
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
