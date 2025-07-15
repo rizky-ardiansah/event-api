@@ -2,6 +2,8 @@
 
 Simple REST API untuk mengelola event dan attendees yang dibangun menggunakan Go, Gin framework, dan PostgreSQL database.
 
+**Demo Swagger**: https://cold-mari-rizky-ardiansah-1181f7a4.koyeb.app/swagger/
+
 ## Features
 
 - 🔐 **Authentication**: JWT-based authentication
