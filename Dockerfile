@@ -14,7 +14,6 @@ FROM alpine:latest
 
 COPY --from=builder /app/event-api /app/event-api
 COPY --from=builder /app/docs/swagger.json /app/swagger.json
-COPY --from=builder /app/.env /app/.env
 
 WORKDIR /app
 
